@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [userId, setUserId] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const userIdParam = searchParams.get("userId");
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(
           "https://jsonplaceholder.typicode.com/posts",
         );
@@ -15,10 +20,15 @@ const PostList = () => {
         setPosts(data);
       } catch (error) {
         console.error("Error fetching posts:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPosts();
-  }, []);
+    if (userIdParam) {
+      setUserId(Number(userIdParam));
+    }
+  }, [userIdParam]);
 
   const filteredPosts = posts.filter((post) => post.userId === userId);
   console.log(filteredPosts);
@@ -28,16 +38,22 @@ const PostList = () => {
       <h1>Post List</h1>
       <div>
         <input
-          type="number"
+          type="text"
           placeholder="UserID"
-          // value={userId}
+          value={userId}
           onChange={(e) => setUserId(Number(e.target.value))}
         />
         <p>User ID: {userId}</p>
       </div>
-      {filteredPosts.map((post) => (
-        <PostItem key={`post-${post.id}`} post={post} />
-      ))}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : filteredPosts.length > 0 ? (
+        filteredPosts.map((post) => (
+          <PostItem key={`post-${post.id}`} post={post} />
+        ))
+      ) : (
+        <p>No posts found</p>
+      )}
     </div>
   );
 };
