@@ -42,13 +42,17 @@ const Header = () => {
           My App
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
+        
+        {/* Stack 내부 속성들을 sx 안으로 모았습니다 */}
         <Stack
           direction="row"
           spacing={0.5}
           useFlexGap
-          flexWrap="wrap"
-          justifyContent="flex-end"
-          alignItems="center"
+          sx={{ 
+            flexWrap: "wrap", 
+            justifyContent: "flex-end", 
+            alignItems: "center" 
+          }}
         >
           {navItems.map(({ label, to }) => (
             <Button

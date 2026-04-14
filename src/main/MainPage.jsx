@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { Typography, Button, Stack } from "@mui/material";
 import Card from "../common/card/Card";
 import StyledBox from "../common/box/StyledBox";
@@ -9,7 +10,7 @@ const Greeting = () => {
   const { theme } = useContext(MyThemeContext);
   const name = "Taem";
   return (
-    <Stack alignItems="center" sx={{ py: 2 }}>
+    <Stack sx={{ alignItems: "center", py: 2 }}>
       <Typography variant="h3" component="h1" gutterBottom>
         Hello, {name} ({theme})
       </Typography>
@@ -23,11 +24,29 @@ const MainPage = () => {
     showAlert("Hello, World!", "success");
   };
   return (
-    <Stack spacing={3} alignItems="center" sx={{ width: "100%" }}>
+    <Stack spacing={3} sx={{ alignItems: "center", width: "100%" }}>
       <Greeting />
       <Button variant="contained" color="primary" onClick={handleClick}>
         Click me
       </Button>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <Button
+          component={RouterLink}
+          to="/counter-redux"
+          variant="outlined"
+          color="primary"
+        >
+          Redux Toolkit 카운터
+        </Button>
+        <Button
+          component={RouterLink}
+          to="/counter-zustand"
+          variant="outlined"
+          color="secondary"
+        >
+          Zustand 카운터
+        </Button>
+      </Stack>
       <Card sx={{ width: "100%", maxWidth: 480 }} />
       <StyledBox />
     </Stack>

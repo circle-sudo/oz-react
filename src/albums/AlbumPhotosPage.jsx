@@ -173,7 +173,7 @@ const AlbumPhotosPage = () => {
       {error && <Alert severity="error">{error}</Alert>}
 
       {loading && (
-        <Stack alignItems="center" sx={{ py: 4 }}>
+        <Stack sx={{ alignItems: "center", py: 4 }}>
           <CircularProgress />
         </Stack>
       )}

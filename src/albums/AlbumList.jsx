@@ -79,7 +79,7 @@ const AlbumList = () => {
           onSubmit={handleAddAlbum}
           direction={{ xs: "column", sm: "row" }}
           spacing={1}
-          alignItems={{ sm: "flex-start" }}
+          sx={{ alignItems: { sm: "flex-start" } }}
         >
           <TextField
             label="앨범 이름"
@@ -102,7 +102,7 @@ const AlbumList = () => {
       {error && <Alert severity="error">{error}</Alert>}
 
       {loading && (
-        <Stack alignItems="center" sx={{ py: 4 }}>
+        <Stack sx={{ alignItems: "center", py: 4 }}>
           <CircularProgress />
         </Stack>
       )}
