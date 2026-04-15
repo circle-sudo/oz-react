@@ -1,4 +1,9 @@
 import { create } from "zustand";
+import { API_URL } from "../util/config";
+import { axios } from "../util/axios";
+
+const USER_PATH = "/users";
+const USER_URL = `${API_URL}${USER_PATH}`;
 
 const initialUser = {
   id: 0,
@@ -33,11 +38,8 @@ const useUserStore = create((set) => ({
   getUsers: async () => {
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users",
-      );
-      const data = await response.json();
-      set({ users: data });
+      const response = await axios.get(`${USER_URL}`);
+      set({ users: response.data });
     } catch (error) {
       console.error("Error fetching users:", error);
       set({ isError: true, error: error });
@@ -48,11 +50,8 @@ const useUserStore = create((set) => ({
   getUser: async (userId) => {
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/users/${userId}`,
-      );
-      const data = await response.json();
-      set({ user: data });
+      const response = await axios.get(`${USER_URL}/${userId}`);
+      set({ user: response.data });
     } catch (error) {
       console.error("Error fetching user:", error);
       set({ isError: true, error: error });
@@ -63,15 +62,8 @@ const useUserStore = create((set) => ({
   addUser: async (user) => {
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/users`,
-        {
-          method: "POST",
-          body: JSON.stringify(user),
-        },
-      );
-      const data = await response.json();
-      set((state) => ({ users: [...state.users, data] }));
+      const response = await axios.post(`${USER_URL}`, user);
+      set((state) => ({ users: [...state.users, response.data] }));
     } catch (error) {
       console.error("Error adding user:", error);
       set({ isError: true, error: error });
@@ -80,18 +72,13 @@ const useUserStore = create((set) => ({
     }
   },
   updateUser: async (userId, user) => {
+    const idNum = Number(userId);
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/users/${userId}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(user),
-        },
-      );
-      const data = await response.json();
+      const response = await axios.put(`${USER_URL}/${userId}`, user);
       set((state) => ({
-        users: state.users.map((u) => (u.id === userId ? data : u)),
+        users: state.users.map((u) => (u.id === idNum ? response.data : u)),
+        user: state.user.id === idNum ? response.data : state.user,
       }));
     } catch (error) {
       console.error("Error updating user:", error);
@@ -101,12 +88,14 @@ const useUserStore = create((set) => ({
     }
   },
   deleteUser: async (userId) => {
+    const idNum = Number(userId);
     try {
       set({ isLoading: true });
-      await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`, {
-        method: "DELETE",
-      });
-      set((state) => ({ users: state.users.filter((u) => u.id !== userId) }));
+      await axios.delete(`${USER_URL}/${userId}`);
+      set((state) => ({
+        users: state.users.filter((u) => u.id !== idNum),
+        user: state.user.id === idNum ? initialUser : state.user,
+      }));
     } catch (error) {
       console.error("Error deleting user:", error);
       set({ isError: true, error: error });

@@ -1,4 +1,9 @@
 import { create } from "zustand";
+import { API_URL } from "../util/config";
+import { axios } from "../util/axios";
+
+const POST_PATH = "/posts";
+const POST_URL = `${API_URL}${POST_PATH}`;
 
 const initialPost = {
   userId: 0,
@@ -16,11 +21,8 @@ const usePostStore = create((set) => ({
   getPosts: async () => {
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/posts",
-      );
-      const data = await response.json();
-      set({ posts: data });
+      const response = await axios.get(`${POST_URL}`);
+      set({ posts: response.data });
     } catch (error) {
       console.error("Error fetching posts:", error);
       set({ isError: true, error: error });
@@ -31,11 +33,8 @@ const usePostStore = create((set) => ({
   getPost: async (postId) => {
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${postId}`,
-      );
-      const data = await response.json();
-      set({ post: data });
+      const response = await axios.get(`${POST_URL}/${postId}`);
+      set({ post: response.data });
     } catch (error) {
       console.error("Error fetching post:", error);
       set({ isError: true, error: error });
@@ -46,35 +45,25 @@ const usePostStore = create((set) => ({
   addPost: async (post) => {
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts`,
-        {
-          method: "POST",
-          body: JSON.stringify(post),
-        },
-      );
-      const data = await response.json();
-      set((state) => ({ posts: [...state.posts, data] }));
+      const response = await axios.post(`${POST_URL}`, post);
+      set((state) => ({ posts: [...state.posts, response.data] }));
+      return response.data;
     } catch (error) {
       console.error("Error adding post:", error);
       set({ isError: true, error: error });
+      return null;
     } finally {
       set({ isLoading: false });
     }
   },
   updatePost: async (postId, post) => {
+    const idNum = Number(postId);
     try {
       set({ isLoading: true });
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${postId}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(post),
-        },
-      );
-      const data = await response.json();
+      const response = await axios.put(`${POST_URL}/${postId}`, post);
       set((state) => ({
-        posts: state.posts.map((p) => (p.id === postId ? data : p)),
+        posts: state.posts.map((p) => (p.id === idNum ? response.data : p)),
+        post: state.post.id === idNum ? response.data : state.post,
       }));
     } catch (error) {
       console.error("Error updating post:", error);
@@ -84,12 +73,14 @@ const usePostStore = create((set) => ({
     }
   },
   deletePost: async (postId) => {
+    const idNum = Number(postId);
     try {
       set({ isLoading: true });
-      await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`, {
-        method: "DELETE",
-      });
-      set((state) => ({ posts: state.posts.filter((p) => p.id !== postId) }));
+      await axios.delete(`${POST_URL}/${postId}`);
+      set((state) => ({
+        posts: state.posts.filter((p) => p.id !== idNum),
+        post: state.post.id === idNum ? initialPost : state.post,
+      }));
     } catch (error) {
       console.error("Error deleting post:", error);
       set({ isError: true, error: error });
