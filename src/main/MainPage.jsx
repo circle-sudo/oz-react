@@ -24,12 +24,17 @@ const MainPage = () => {
     showAlert("Hello, World!", "success");
   };
   return (
-    <Stack spacing={3} sx={{ alignItems: "center", width: "100%" }}>
+    <Stack sx={{ spacing: 3, alignItems: "center", width: "100%" }}>
       <Greeting />
       <Button variant="contained" color="primary" onClick={handleClick}>
         Click me
       </Button>
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+      <Stack 
+        sx={{ 
+          flexDirection: { xs: "column", sm: "row" }, 
+          gap: 2 
+        }}
+      >
         <Button
           component={RouterLink}
           to="/counter-redux"
@@ -47,6 +52,14 @@ const MainPage = () => {
           Zustand 카운터
         </Button>
       </Stack>
+      <Button
+        component={RouterLink}
+        to="/memo"
+        variant="outlined"
+        color="primary"
+      >
+        Memoization 페이지
+      </Button>
       <Card sx={{ width: "100%", maxWidth: 480 }} />
       <StyledBox />
     </Stack>

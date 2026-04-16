@@ -114,7 +114,7 @@ const UserEdit = () => {
       <Typography variant="h4" component="h1">
         사용자 수정
       </Typography>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
         <Button variant="outlined" component={RouterLink} to="/day26/user">
           목록
         </Button>

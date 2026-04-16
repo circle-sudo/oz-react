@@ -127,9 +127,8 @@ const PostItem = ({ post, onDeleteClick }) => {
     <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
       <Stack
         direction="row"
-        alignItems="flex-start"
-        justifyContent="space-between"
         spacing={1}
+        sx={{ alignItems: "flex-start", justifyContent: "space-between" }}
       >
         <Box
           component={RouterLink}
@@ -144,7 +143,7 @@ const PostItem = ({ post, onDeleteClick }) => {
           <Typography variant="h6" component="h2" gutterBottom>
             {post.id}. {post.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary" paragraph>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             {post.body}
           </Typography>
         </Box>
@@ -161,7 +160,7 @@ const PostItem = ({ post, onDeleteClick }) => {
         </IconButton>
       </Stack>
       <Divider sx={{ my: 1 }} />
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
         <Typography variant="caption" color="text.secondary">
           User ID: {post.userId}
         </Typography>

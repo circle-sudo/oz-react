@@ -62,7 +62,7 @@ const UserView = () => {
       <Typography variant="h4" component="h1">
         사용자 상세
       </Typography>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
         <Button variant="outlined" onClick={() => navigate(-1)}>
           뒤로
         </Button>

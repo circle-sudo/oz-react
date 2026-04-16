@@ -113,7 +113,7 @@ const PostEdit = () => {
       <Typography variant="h4" component="h1">
         게시글 수정
       </Typography>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
         <Button variant="outlined" component={RouterLink} to="/day26/post">
           목록
         </Button>
